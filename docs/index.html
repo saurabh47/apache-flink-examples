@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Apache Flink - Reveal.js Presentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.css">
+	<!-- <link rel="stylesheet" href="../plugin/highlight/monokai.css"> -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/night-owl.min.css">
+    <style>
+        .flex-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .flex-container img {
+            max-width: 50%;
+            height: auto;
+        }
+        .flex-container .text {
+            max-width: 45%;
+            font-size: 0.8em;
+        }
+        .image-grid {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .image-grid div {
+            text-align: center;
+            padding: 5px;
+            border-radius: 10px;
+        }
+        .image-grid img {
+            width: 350px;
+            height: auto;
+            background: white;
+        }
+        .image-grid h5 {
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h1 data-transition="fade-in">Apache Flink</h1>
+                <p data-transition="fade-in" data-delay="500">Introduction to Stream Processing</p>
+                <img src="https://flink.apache.org/img/logo/png/200/flink_squirrel_200_color.png" alt="Apache Flink Logo" width="300" data-transition="fade-in" data-delay="1000">
+            </section>
+            
+            <section>
+                <h2>What is Apache Flink?</h2>
+                <p>Apache Flink is a distributed stream processing framework for real-time and batch data processing.</p>
+                <ul>
+                    <li>Designed for high performance and scalability</li>
+                    <li>Supports event-driven applications</li>
+                    <li>Fault-tolerant and stateful computations</li>
+                </ul>
+                <img src="https://miro.medium.com/v2/resize:fit:2000/format:webp/1*bTcLVxBV8AhvgF0cRMRlKg.png" alt="Flink Parallel Processing" width="600">
+            </section>
+            
+            <section>
+                <h2>Main Building Blocks</h2>
+                <div class="flex-container">
+                    <div class="text">
+                        <p>Flink's core architecture consists of:</p>
+                        <ul>
+                            <li><b>Source</b>: Reads data from external systems</li>
+                            <li><b>Process</b>: Transforms data using operators</li>
+                            <li><b>Sink</b>: Outputs data to external systems</li>
+                        </ul>
+                        <p>Supported languages: SQL, Java, Python</p>
+                    </div>
+                    <img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/1*A9YrAY1h_kT9KcCcqSoZNA.png" alt="Flink Architecture">
+                </div>
+            </section>
+            
+            <section>
+                <h2>Watermarking</h2>
+                <p>Watermarks help manage event time processing by tracking lateness.</p>
+                <ul>
+                    <li>Defines when events should be processed</li>
+                    <li>Handles out-of-order event streams</li>
+                    <li>Ensures correct time-based aggregations</li>
+                </ul>
+                <img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/1*tl2jNVl1F2XsVZEISxdrLw.png" alt="Watermarking in Flink" width="600">
+            </section>
+            
+            <section>
+                <h2>Windowing</h2>
+                <p>Windows group data streams into finite sets for processing.</p>
+                <ul>
+                    <li>Time-based windows (Tumbling, Sliding, Session)</li>
+                    <li>Custom windowing strategies</li>
+                </ul>
+                <div class="image-grid">
+                    <div>
+                        <h5>Tumbling Window</h5>
+                        <img src="https://nightlies.apache.org/flink/flink-docs-master/fig/tumbling-windows.svg" alt="Tumbling Window">
+                    </div>
+                    <div>
+                        <h5>Sliding Window</h5>
+                        <img src="https://nightlies.apache.org/flink/flink-docs-master/fig/sliding-windows.svg" alt="Sliding Window">
+                    </div>
+                    <div>
+                        <h5>Session Window</h5>
+                        <img src="https://nightlies.apache.org/flink/flink-docs-master/fig/session-windows.svg" alt="Session Window">
+                    </div>
+                </div>
+            </section>
+            
+            <section>
+                <h2>Flink SQL - (Source & Sink)</h2>
+                <pre><code data-trim data-line-numbers>-- Source Table / Topic
+CREATE TABLE sensor (
+	id STRING,
+	timestamp TIMESTAMP(3),
+	temperature DOUBLE,
+	WATERMARK FOR timestamp AS timestamp - INTERVAL '5' SECOND
+) WITH (
+	'connector' = 'kafka',
+	'topic' = 'sensor-data',
+	'format' = 'json',
+	'properties.bootstrap.servers' = 'localhost:9092'
+);
+-- Sink Table / Topic
+CREATE TABLE aggregated_sensor (
+	id STRING,
+	window_start TIMESTAMP(3),
+	window_end TIMESTAMP(3),
+	avg_temp DOUBLE
+) WITH (
+	'connector' = 'kafka',
+	'topic' = 'aggregated-sensor-data',
+	'format' = 'json',
+	'properties.bootstrap.servers' = 'localhost:9092'
+);
+                </code></pre>
+            </section>
+
+			<section>
+                <h2>Processing Logic</h2>
+                <pre><code data-trim data-line-numbers>INSERT INTO aggregated_sensor
+SELECT id, 
+	TUMBLE_START(timestamp, INTERVAL '10' SECOND) AS window_start,
+	TUMBLE_END(timestamp, INTERVAL '10' SECOND) AS window_end,
+	AVG(temperature) AS avg_temp
+FROM sensor
+GROUP BY id, TUMBLE(timestamp, INTERVAL '10' SECOND);
+                </code></pre>
+            </section>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+			width: 1080
+		});
+    </script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+
+
+		<script>hljs.highlightAll();hljs.initLineNumbersOnLoad();</script>
+		
+</body>
+</html>
