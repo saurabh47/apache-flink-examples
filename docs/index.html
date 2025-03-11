@@ -9,6 +9,9 @@
 	<!-- <link rel="stylesheet" href="../plugin/highlight/monokai.css"> -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/night-owl.min.css">
     <style>
+		.profile {
+			border-radius: 50%;
+		}
         .flex-container {
             display: flex;
             align-items: center;
@@ -22,6 +25,10 @@
             max-width: 45%;
             font-size: 0.8em;
         }
+		.flex-container .intro {
+			font-size: 14px;
+			text-align: left;
+		}
         .image-grid {
             display: flex;
             justify-content: space-around;
@@ -47,6 +54,23 @@
 <body>
     <div class="reveal">
         <div class="slides">
+			<section>
+                <div class="flex-container">
+                    <img class="profile" src="https://avatars.githubusercontent.com/u/15173289?v=4" alt="Saurabh's Image">
+                    <div class="intro">
+                        <h2>Hi, I'm Saurabh! 👋</h2>
+                        <p>🔭 Building an Analytics Tool using Angular, NestJs, Java, Scala, Flink, MySQL & Snowflake ...</p>
+                        <p>🌱 Currently learning Flink & AI/ML.</p>
+                        <p>👯 Looking to collaborate on Angular, NestJs Open Source Projects.</p>
+                        <p>🤔 Seeking help with AWS & Networking.</p>
+                        <p>💬 Ask me about any tech-related stuff.</p>
+                        <p>📫 Connect on Twitter: <a href="https://twitter.com/saurabh47g" target="_blank">@saurabh47g</a></p>
+                        <p>😄 Pronouns: He/His</p>
+                        <p>⚡ Fun fact: NULL</p>
+                        <p>🔗 GitHub: <a href="https://github.com/saurabh47" target="_blank">github.com/saurabh47</a></p>
+                    </div>
+                </div>
+            </section>
             <section>
                 <h1 data-transition="fade-in">Apache Flink</h1>
                 <p data-transition="fade-in" data-delay="500">Introduction to Stream Processing</p>
@@ -65,19 +89,28 @@
             </section>
             
             <section>
-                <h2>Main Building Blocks</h2>
-                <div class="flex-container">
-                    <div class="text">
-                        <p>Flink's core architecture consists of:</p>
-                        <ul>
-                            <li><b>Source</b>: Reads data from external systems</li>
-                            <li><b>Process</b>: Transforms data using operators</li>
-                            <li><b>Sink</b>: Outputs data to external systems</li>
-                        </ul>
-                        <p>Supported languages: SQL, Java, Python</p>
-                    </div>
-                    <img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/1*A9YrAY1h_kT9KcCcqSoZNA.png" alt="Flink Architecture">
-                </div>
+				<section>
+					<h2>Main Building Blocks</h2>
+					<div class="flex-container">
+						<div class="text">
+							<p>Flink's core architecture consists of:</p>
+							<ul>
+								<li><b>Source</b>: Reads data from external systems</li>
+								<li><b>Process</b>: Transforms data using operators</li>
+								<li><b>Sink</b>: Outputs data to external systems</li>
+							</ul>
+							<p>Supported languages: SQL, Java, Python</p>
+						</div>
+						<img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/1*A9YrAY1h_kT9KcCcqSoZNA.png" alt="Flink Architecture">
+					</div>
+				</section>
+
+				<section>
+					<h2>Flink Cluster</h2>
+					<div style="background: white;">
+						<img src="https://nightlies.apache.org/flink/flink-docs-release-1.20/fig/processes.svg" alt="Flink Architecture">
+					</div>
+				  </section>
             </section>
             
             <section>
