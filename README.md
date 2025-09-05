@@ -2,6 +2,9 @@
 
 <img width="844" height="428" alt="image" src="https://github.com/user-attachments/assets/3a4dddf6-26cf-4c99-acb3-c0958b8588fb" />
 
+## Presentation
+https://saurabh.gangamwar.com/apache-flink-examples/
+
 ## PyFlink Installation
 To use Flink’s Python API, you need to install PyFlink, which is a Python package that provides the DataStream and Table APIs for Python users.
 You can install PyFlink using pip:
